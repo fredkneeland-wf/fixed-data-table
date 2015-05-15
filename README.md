@@ -1,93 +1,84 @@
-Fixed Data Tables for React
+Fixed Data Tables for Dart React
 ====================================
 
-FixedDataTable is a React component for building and presenting data in a flexible, powerful way. It supports standard table features, like headers, columns, rows, header groupings, and both fixed-position and scrolling columns.
-
-The table was designed to handle thousands rows of data without sacrificing performance. Scrolling smoothly is a first-class goal of FixedDataTable and it's architected in a way to allow for flexibility and extensibility.
-
-Features of FixedDataTable:
-* Fixed headers and footer
-* Both fixed and scrollable columns
-* Handling huge amounts of data
-* Variable row heights (with adaptive scroll positions)
-* Column resizing
-* Performant scrolling
-* Customizable styling
-* Jumping to a row or column
-* Controlled scroll API allows touch support
-
-Things the FixedDataTable doesn't do:
-* FixedDataTable does not provide a layout reflow mechanism or calculate content layout information such as width and height of the cell contents. The developer has to provide the layout information to the table instead.
-* FixedDataTable does not handle sorting of data. Instead it allows the developer to supply data getters that can be sort-, filter-, or tail-loading-aware.
-* FixedDataTable does not fetch the data (see above)
+This repo was created to allow FaceBook's FixedDataTable react component to be used in Dart.  For the original source go to: https://github.com/facebook/fixed-data-table
 
 Getting started
 ---------------
 
-Install `fixed-data-table` using npm.
+To use this repo include it in your pubspec.yaml as a git dependency
 
-```shell
-npm install fixed-data-table
+```yaml
+fixed_data_table:
+    git:
+      url: git@github.com:fredkneeland-wf/fixed-data-table.git
+      ref: 1.0.0
 ```
 
-Add the default stylesheet `dist/fixed-data-table.css`, then require it into any module.
 
-```javascript
-var React = require('react');
-var FixedDataTable = require('fixed-data-table');
+Then in your dart file import this package:
 
-var Table = FixedDataTable.Table;
-var Column = FixedDataTable.Column;
+```dart
+import 'package:fixed_data_table/fixed-data-table.dart';
+```
 
-// Table data as a list of array.
-var rows = [
-  ['a1', 'b1', 'c1'],
-  ['a2', 'b3', 'c2'],
-  ['a3', 'b3', 'c3'],
-  ..... /// and more
-];
+Then inside of your render file include something in the form:
 
-function rowGetter(rowIndex) {
-  return rows[rowIndex];
+```
+FixedDataTable({'rowHeight':rowHeight, 'rowGetter':rowGetterFunc, 'rowsCount':rowArray.length, 'width':TableWidth, 'height':TableHeight,'headerHeight':HeaderHeight,'groupHeaderHeight':GroupHeaderHeight}, [
+        FixedDataTableColumnGroup({'label':'Users', 'width':650}, [
+          FixedDataTableColumn({'width':col1Width,'cellRenderer': col1Input, 'dataKey':'col1Param'}),
+          FixedDataTableColumn({'width':col2Width,'cellRenderer': col2Input, 'dataKey':'col2Param'})
+        ]),
+])
+```
+
+col1Width, col2Width, rowHeight, TableWidth, TableHeight, HeaderHeight, and GroupHeaderHeight are all numerical props
+
+rowGetterFunc is a function that returns an object with the row data for an index i.e.
+
+```dart
+rowGetterFunc(rowIndex) {
+  return rowArray[index];
 }
-
-React.render(
-  <Table
-    rowHeight={50}
-    rowGetter={rowGetter}
-    rowsCount={rows.length}
-    width={5000}
-    height={5000}
-    headerHeight={50}>
-    <Column
-      label="Col 1"
-      width={3000}
-      dataKey={0}
-    />
-    <Column
-      label="Col 2"
-      width={2000}
-      dataKey={1}
-    />
-  </Table>,
-  document.getElementById('example')
-);
 ```
 
+rowArray is an array of objects that contain the data you want for your chart i.e.
 
-Contributions
-------------
+```dart
+var rowArray = [
+  {
+    'name':'name',
+    'age':10
+  },
+  {
+    'name2':'name2',
+    'age':15
+  }
+];
+```
 
-Use [Github issues](https://github.com/facebook/fixed-data-table/issues) for requests.
+col1Input and col2Input are functions that return the react component for a given row determined by dataKey i.e.
 
-We actively welcome pull requests; learn how to [contribute](https://github.com/facebook/fixed-data-table/blob/master/CONTRIBUTING.md).
+```dart
+  col1Input(data) {
+      return div({}, [
+        data
+      ]);
+  }
+  
+  col2Input(data) {
+        return div({}, [
+          Input({'key':'1:${data}', 'onChange': onChangeFunc, 'type': 'radio', 'label': 'owner', 'value': '3', 'name': 'name', 'checked': false})
+        ]);
+    }
+```
 
+The parameter data will be rowArray[index]['col1Param'] if you only want to display the data and don't want to render a react component you can ommit the 'cellRenderer' prop.
 
-Changelog
----------
+Make sure to wrap a react component in a div as in the above examples as without it you will get an error.
 
-Changes are tracked as [Github releases](https://github.com/facebook/fixed-data-table/releases).
-
+If you have any questions feel free to ping me on hipchat or email me at fred.kneeland@workiva.com
 
 License
 -------
