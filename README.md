@@ -15,6 +15,13 @@ fixed_data_table:
       ref: 1.0.0
 ```
 
+In your html page include
+
+```html
+<link rel="stylesheet" href="packages/fixed_data_table/fixed-data-table.css">
+<script src="packages/fixed_data_table/fixed-data-table.js"></script>
+```
+
 
 Then in your dart file import this package:
 
