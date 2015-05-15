@@ -18,6 +18,7 @@ fixed_data_table:
 In your html page include
 
 ```html
+<link rel="stylesheet" href="packages/fixed_data_table/fixed-data-table.css">
 <script src="packages/fixed_data_table/fixed-data-table.js"></script>
 ```
 
